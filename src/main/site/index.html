@@ -1,0 +1,136 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		
+		<script type="text/javascript">
+			function getLight() {
+				var obj = $.parseJSON(
+				    $.ajax(
+				        {
+				           url: "http://right-eye:8182/lights/level", 
+				           async: false, 
+				           dataType: 'json'
+				        }
+				    ).responseText
+				);
+				
+				return obj.level;
+			}
+			
+			function setLight(event, ui) {
+				$.ajax({
+				    type: "POST",
+				    url: 'http://right-eye:8182/lights/level',
+				    data: { level : ui.value },
+				    dataType: 'json',
+				});
+			}
+			
+			function getServo() {
+				var obj = $.parseJSON(
+				    $.ajax(
+				        {
+				           url: "http://right-eye:8182/servo/direction", 
+				           async: false, 
+				           dataType: 'json'
+				        }
+				    ).responseText
+				);
+				
+				return obj.dir;
+			}
+			
+			function setServo(event, ui) {
+				$.ajax({
+				    type: "POST",
+				    url: 'http://right-eye:8182/servo/direction',
+				    data: { dir : ui.value },
+				    dataType: 'json',
+				});
+			}
+			
+			function blink() {
+				$.ajax(
+		        {
+							 type: "POST",
+		           url: "http://right-eye:8182/lights/blink", 
+							 data: { time : $("#blink-slider").slider( "option", "value" ) },
+		           dataType: 'json'
+		        }
+					);
+			}
+			
+			function reloadImage() {
+				var d = new Date();
+				$("#image").attr("src", "http://right-eye:8182/image/current?"+d.getTime());
+			}
+		
+			$(function() {
+			    $( "#light-slider" ).slider({
+						min: 0,
+						max: 1,
+						step: 0.01,
+						value: getLight(),
+					  change: setLight,
+						slide: setLight
+					});
+					
+					$( "#servo-slider" ).slider({
+						min: 0,
+						max: 1,
+						step: 0.005,
+						value: getServo(),
+					  change: setServo,
+						slide: setServo
+					});
+					
+					$("#blink-slider").slider({
+						min: 10,
+						max: 10000,
+						step: 100
+					});
+					
+					$( "#blink" ).button().click(function( event ) {
+						blink();
+						event.preventDefault();
+					});
+					
+					$("#image").load(function() { 
+						//setTimeout(reloadImage,10); 
+						reloadImage()
+						console.log("reload");	
+					});
+					reloadImage();
+			  });
+		</script>
+	</head>
+	<body>
+		<h1>Erica Eye Controller</h1>
+
+		<br />
+		
+		<div id="lights">
+			<h2>Light level</h2>
+			<div id="light-slider" style="width:500px"></div>
+			
+			<br />
+			
+			<div>
+				<h2>Blink</h2>
+				<div id="blink-slider" style="width:500px"></div>
+				<button id="blink">Blink</button>
+			</div>
+		</div>
+		
+		<br />
+		
+		<h2>Servo</h2>
+		<div id="servo-slider" style="width:500px"></div>
+		
+		<h2>Image</h2>
+		<img id="image"/>
+		
+	</body>
+</html>

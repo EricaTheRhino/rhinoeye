@@ -1,0 +1,65 @@
+package rhino;
+
+import java.awt.image.BufferedImage;
+
+import org.openimaj.image.ImageUtilities;
+import org.openimaj.image.MBFImage;
+import org.openimaj.util.function.Operation;
+import org.openimaj.video.capture.VideoCaptureException;
+import org.restlet.Restlet;
+import org.restlet.resource.ClientResource;
+
+import rhino.util.RestletUtil;
+
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+
+public class EyeQRApp extends EyeWatchingApp {
+	
+	public EyeQRApp() throws VideoCaptureException {
+		super();
+	}
+	private final class QRCodeOperation implements Operation<MBFImage> {
+		private BufferedImage bimg;
+		private QRCodeReader reader;
+		private ClientResource brain;
+		public QRCodeOperation() {
+			this.reader = new com.google.zxing.qrcode.QRCodeReader();
+			brain = new ClientResource("brain");
+		}
+		@Override
+		public void perform(MBFImage frame) {
+			if(isActive){
+				logger.debug("Searching for QR image");
+				this.bimg = ImageUtilities.createBufferedImageForDisplay(frame, this.bimg);
+				final LuminanceSource source = new BufferedImageLuminanceSource(this.bimg);
+				final BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+					Result res;
+					try {
+						res = this.reader.decode(bitmap);
+						if(res.getText()!=null)
+						{
+							logger.debug("Got QR text: " + res.getText());
+							EyeLightControl.getInstance().blink(100);
+							brain.post(RestletUtil.json("qr",res.getText()));
+						}
+					} catch (NotFoundException e) {
+					} catch (ChecksumException e) {
+					} catch (FormatException e) {
+					}
+			}
+		}
+	}
+	@Override
+	public Operation<MBFImage> getOperation() {
+		return new QRCodeOperation();
+	}
+
+}
