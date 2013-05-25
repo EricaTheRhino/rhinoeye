@@ -47,7 +47,6 @@ public class EyeQRApp extends EyeWatchingApp {
 					if (res.getText() != null)
 					{
 						logger.debug("Got QR text: " + res.getText());
-						EyeLightControl.getInstance().blink(100);
 
 						BrainInterface.postEvent("rhino." + RhinoPrefs.getString("eye.name", "righteye") + ".scan",
 								"qr", res.getText());

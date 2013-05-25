@@ -8,8 +8,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
 
 public class BrainInterface {
+	static Logger logger = Logger.getLogger(BrainInterface.class);
+
 	public static void postEvent(String name, String... params) {
 		try {
 			final HttpClient httpclient = new DefaultHttpClient();
@@ -20,9 +23,9 @@ public class BrainInterface {
 
 			final HttpResponse res = httpclient.execute(httppost);
 
-			System.err.println(IOUtils.toString(res.getEntity().getContent()));
+			logger.debug(IOUtils.toString(res.getEntity().getContent()));
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.debug(e);
 		}
 	}
 
