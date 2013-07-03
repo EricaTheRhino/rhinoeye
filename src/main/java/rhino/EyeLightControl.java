@@ -2,6 +2,8 @@ package rhino;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
@@ -19,6 +21,7 @@ public class EyeLightControl implements PreferenceChangeListener {
 	public float currentBright;
 
 	private EyeLightControl() {
+		
 		setBrightness(1f);
 		RhinoPrefs.getPrefs().addPreferenceChangeListener(this);
 	}

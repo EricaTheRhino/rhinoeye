@@ -75,23 +75,7 @@ public class RhinoPrefs extends Application {
 		return ret;
 	}
 
-	// public static float getFloat(String key, float i) {
-	// float ret = getPrefs().getFloat(
-	// key,
-	// Float.parseFloat(System.getProperty(key,"" + i))
-	// );
-	// getPrefs().put(key, ""+ret);
-	// return ret;
-	// }
-	//
-	// public static boolean getBoolean(String key, boolean i) {
-	// boolean ret = getPrefs().getBoolean(
-	// key,
-	// Boolean.parseBoolean(System.getProperty(key,"" + i))
-	// );
-	// getPrefs().put(key, ""+ret);
-	// return ret;
-	// }
+	
 	public static class RhinoPrefInner extends AppTypedResource<RhinoPrefs> {
 		@Put
 		@Post

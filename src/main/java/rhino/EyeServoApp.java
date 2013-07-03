@@ -15,7 +15,7 @@ import org.restlet.resource.Put;
 import org.restlet.routing.Router;
 
 
-public class EyeServoApp extends Application {
+public class EyeServoApp extends LockableApplication {
 	
 	public static class EyeDirection extends AppTypedResource<EyeServoApp>{
 		public EyeDirection() {
@@ -23,6 +23,7 @@ public class EyeServoApp extends Application {
 		@Put
 		@Post
 		public void direction(Representation r) {
+			this.app.lock();
 			Form form = new Form(r);
 			String direction = form.getFirstValue("dir");
 			String time = form.getFirstValue("int");
@@ -32,6 +33,7 @@ public class EyeServoApp extends Application {
 			else{
 				this.app.servo.servoSet(Float.parseFloat(direction),Long.parseLong(time));
 			}
+			this.app.unlock();
 		}
 		
 		@Get("json")

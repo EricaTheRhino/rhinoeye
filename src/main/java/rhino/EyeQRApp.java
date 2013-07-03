@@ -24,6 +24,7 @@ public class EyeQRApp extends EyeWatchingApp {
 
 	public EyeQRApp() throws VideoCaptureException {
 		super();
+		this.isActive = true;
 	}
 
 	private final class QRCodeOperation implements Operation<MBFImage> {

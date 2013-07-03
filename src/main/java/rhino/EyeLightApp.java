@@ -15,15 +15,17 @@ import org.restlet.resource.Put;
 import org.restlet.routing.Router;
 
 
-public class EyeLightApp extends Application {
+public class EyeLightApp extends LockableApplication {
 	public static class EyeBlink extends AppTypedResource<EyeLightApp> {
 		@Post
 		@Put
 		public void blink(Representation rep) {
+			this.app.lock();
 			Form form = new Form(rep);
 			this.app.eyecontrol.blink(
 				Long.parseLong(form.getFirstValue("time"))
 			);
+			this.app.unlock();
 		}
 		
 	}
@@ -32,10 +34,12 @@ public class EyeLightApp extends Application {
 		@Put
 		@Post
 		public void level(Representation rep) {
+			this.app.lock();
 			Form form = new Form(rep);
 			this.app.eyecontrol.setBrightness(
 				Float.parseFloat(form.getFirstValue("level"))
 			);
+			this.app.unlock();
 		}
 		
 		@Get("json")
