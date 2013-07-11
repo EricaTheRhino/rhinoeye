@@ -18,6 +18,7 @@ public class EyeFaceApp extends EyeWatchingApp {
 
 	public EyeFaceApp() throws VideoCaptureException {
 		super();
+		this.isActive = true;
 	}
 
 	private final class FaceOperation implements Operation<MBFImage> {
