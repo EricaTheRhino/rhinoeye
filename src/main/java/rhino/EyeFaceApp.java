@@ -14,6 +14,9 @@ import org.openimaj.math.geometry.shape.Rectangle;
 import org.openimaj.util.function.Operation;
 import org.openimaj.video.capture.VideoCaptureException;
 
+import rhino.util.BrainInterface;
+import rhino.util.RhinoPrefs;
+
 public class EyeFaceApp extends EyeWatchingApp {
 
 	public EyeFaceApp() throws VideoCaptureException {
@@ -26,6 +29,7 @@ public class EyeFaceApp extends EyeWatchingApp {
 		private ResizeProcessor resize;
 		private int width;
 		private int height;
+		private long lastDet;
 
 		public FaceOperation() {
 			this.width = Integer.parseInt(System.getProperty("eye.face.width", "160"));
@@ -33,11 +37,13 @@ public class EyeFaceApp extends EyeWatchingApp {
 			final int search = Integer.parseInt(System.getProperty("eye.face.search", "20"));
 			this.resize = new ResizeProcessor(width, height);
 			this.det = new HaarCascadeDetector(search);
+			
 		}
 
 		@Override
 		public void perform(MBFImage frame) {
 			if (isActive) {
+				if(System.currentTimeMillis() - this.lastDet < 5000)return;
 				final float xRatio = frame.getWidth() / (float) width;
 				final float yRatio = frame.getHeight() / (float) height;
 				FImage grey = null;
@@ -56,8 +62,10 @@ public class EyeFaceApp extends EyeWatchingApp {
 					face.put("y", rec.y * yRatio);
 					face.put("width", rec.width * xRatio);
 					face.put("height", rec.height * yRatio);
-					logger.debug("Detected face: " + face);
+					BrainInterface.postEvent("interaction." + RhinoPrefs.getString("eye.name", "righteye") + ".face","face", rec.toString());
+					logger.info("Face found!");
 				}
+				this.lastDet = System.currentTimeMillis();
 			}
 		}
 	}

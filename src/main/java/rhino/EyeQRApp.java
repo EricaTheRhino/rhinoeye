@@ -49,7 +49,7 @@ public class EyeQRApp extends EyeWatchingApp {
 					{
 						logger.debug("Got QR text: " + res.getText());
 
-						BrainInterface.postEvent("rhino." + RhinoPrefs.getString("eye.name", "righteye") + ".scan",
+						BrainInterface.postEvent("interaction." + RhinoPrefs.getString("eye.name", "righteye") + ".scan",
 								"qr", res.getText());
 					}
 				} catch (final NotFoundException e) {
