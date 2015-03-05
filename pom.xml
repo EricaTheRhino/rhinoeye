@@ -8,39 +8,101 @@
   <name>Rhino Eye</name>
   <url>http://www.openimaj.org</url>
   <properties>
-    <openimaj.version>1.1.1-SNAPSHOT</openimaj.version>
+    <openimaj.version>1.4-SNAPSHOT</openimaj.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.openimaj</groupId>
+      <artifactId>core-image</artifactId>
+      <version>${openimaj.version}</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.billylieurance.azuresearch</groupId>
+          <artifactId>azure-bing-search-java</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>net.sourceforge.jeuclid</groupId>
+          <artifactId>jeuclid-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>uk.ac.ed.ph.snuggletex</groupId>
+          <artifactId>snuggletex-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>uk.ac.ed.ph.snuggletex</groupId>
+          <artifactId>snuggletex-upconversion</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>uk.ac.ed.ph.snuggletex</groupId>
+          <artifactId>snuggletex-jeuclid</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.flickr4java</groupId>
+          <artifactId>flickr4java</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.openimaj</groupId>
       <artifactId>core-video-capture</artifactId>
       <version>${openimaj.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.android.tools</groupId>
+          <artifactId>dx</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.openimaj</groupId>
       <artifactId>video-processing</artifactId>
       <version>${openimaj.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openimaj</groupId>
+          <artifactId>core-experiment</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.openimaj</groupId>
       <artifactId>faces</artifactId>
       <version>${openimaj.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openimaj</groupId>
+          <artifactId>core-experiment</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.openimaj</groupId>
       <artifactId>image-feature-extraction</artifactId>
       <version>${openimaj.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openimaj</groupId>
+          <artifactId>core-experiment</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.openimaj</groupId>
       <artifactId>core</artifactId>
       <version>${openimaj.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openimaj</groupId>
+          <artifactId>core-experiment</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -96,7 +158,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.7</version>
+        <version>2.10</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>
@@ -144,7 +206,7 @@
           <downloadJavadocs>true</downloadJavadocs>
         </configuration>
       </plugin>
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>2.3</version>
@@ -156,6 +218,16 @@
             </goals>
             <configuration>
               <minimizeJar>true</minimizeJar>
+              <filters>
+                    <filter>
+                        <artifact>*:*</artifact>
+                        <excludes>
+                            <exclude>META-INF/*.SF</exclude>
+                            <exclude>META-INF/*.RSA</exclude>
+                            <exclude>META-INF/*.INF</exclude>
+                        </excludes>
+                    </filter>
+                </filters>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>rhino.App</mainClass>
@@ -164,7 +236,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
     </plugins>
   </build>
 </project>

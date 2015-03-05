@@ -43,7 +43,7 @@ public class TrackingApp extends Application {
 			@Override
 			public void faceFound(DetectedFace face) {
 				float midx = screenDims.width/2;
-				Point2d detMid = face.getBounds().getCOG();
+				Point2d detMid = face.getBounds().calculateCentroid();
 				float move = ((midx - detMid.getX())/midx)/2f;
 				logging.debug("Face detected! Moving servo: " + move);
 				cont.servoDelta(move);
